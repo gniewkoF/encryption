@@ -1,0 +1,89 @@
+package com.company;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+
+public class Main {
+// HEJ PIOTREK PONIZSZY PROGRAM ZAPISYJE JAKO PLIK TXT WIADOMOSC. JEZELI CHCESZ WPISAC WIADOMOSC TO UZYJ STRING TAJNE,
+// DLA ODSZYFROWANIA WIADOMOSCI UZYJ STRING JAWNE. ODPOWIEDZI ZOSTANA ZAPISANE W SKAZANYM PLIKU
+
+    //PROGRAM TWORZY UNIKATOWY KLUCZ KTORY JEST ZALEZNY OD USTAWIEN LOKALNYCH KOMPUTERA I
+    // SZYFRUJE WIADOMOSC NA JEGO PODSTAWIE
+
+    public static void main(String[] args) throws FileNotFoundException {
+//klucz szyfru
+        String nazwa = System.getProperty("user.name");
+        String os = System.getProperty("os.arch");
+        String home = System.getProperty("user.home");
+        String java = System.getProperty("java.vendor.url");
+        String kluczSzyfru = nazwa + os + home + java + "qwertyuiopasdfgh jklzxcvbnm";
+        String kluczSzyfru1 = "*";
+        String odpZaszyfrowany = "";
+        String odpOdszyfrowany = "";
+
+        //usun duplikaty
+        int x = 0;
+        for (int i = 0; i<kluczSzyfru.length();i++){
+            for (int j = 0; j<kluczSzyfru1.length();j++){
+                if (kluczSzyfru.charAt(i)==kluczSzyfru1.charAt(j)) {
+                    x = 1;
+                    j = kluczSzyfru1.length();
+                }
+                else
+                    x=0;
+            }
+            if (x==0)
+                kluczSzyfru1 = kluczSzyfru1 + kluczSzyfru.charAt(i);
+            x = 0;
+        }
+
+        String sciezkaKatalogu = "E:\\program\\";
+        String wiadomosc = "wiadomosc.txt";
+        String zaszyfrowany = "zaszyfrowany.txt";
+
+        //tutaj wpisz wiadmosc do szyfrowania lub odszyfrowania
+        String tajne = "teraz sprawdzam dzialanie";
+        String jawne = "iklUigtbnhsl ghngmkbv*v";
+
+        //plik z zaszyfrowana wiadomoscia
+        File file1 = new File(sciezkaKatalogu + wiadomosc);
+        PrintWriter output1 = new PrintWriter(sciezkaKatalogu + wiadomosc);
+
+        //plik z odszyfrowana wiadomoscia
+        File file2 = new File(sciezkaKatalogu + zaszyfrowany);
+        PrintWriter output2 = new PrintWriter(sciezkaKatalogu + zaszyfrowany);
+
+        System.out.println(kluczSzyfru1);
+        //troche magii
+        for (int i = 0; i < tajne.length(); i++){
+            for(int j = 0;j < kluczSzyfru1.length(); j++){
+                if (tajne.charAt(i)==kluczSzyfru1.charAt(j)){
+                    odpZaszyfrowany = odpZaszyfrowany + kluczSzyfru1.charAt(j-1);
+                    j=kluczSzyfru1.length();
+                }
+            }
+        }
+
+        System.out.print("\n");
+
+        //troche magii x2
+        for (int i = 0; i < jawne.length(); i++){
+            for(int j = 0; j < kluczSzyfru1.length(); j++){
+                if (jawne.charAt(i)==kluczSzyfru1.charAt(j)){
+                    odpOdszyfrowany = odpOdszyfrowany + kluczSzyfru1.charAt(j+1);
+                    j=kluczSzyfru1.length();
+                }
+            }
+        }
+
+        output2.println(odpZaszyfrowany);
+        output1.println(odpOdszyfrowany);
+        output1.close();
+        output2.close();
+
+
+    }
+
+}
